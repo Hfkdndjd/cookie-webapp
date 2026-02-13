@@ -187,7 +187,7 @@
     const completionId = params.get('completion_id');
     const testId = params.get('test_id');
     const score = params.get('score') || '0';
-    const relation = params.get('relation') || '—';
+    const relation = decodeURIComponent(params.get('relation') || '—');
 
     // Показываем статистику
     document.getElementById('score-display').textContent = score + '%';
@@ -232,20 +232,18 @@
     }
 
     async function fetchName() {
-      try {
-        // Запрос к боту для получения имени после оплаты
-        const response = await fetch(
-          `https://cookie-webapp.vercel.app/api/get-name?completion_id=${completionId}&user_id=${userId}`
-        );
-        const data = await response.json();
-
-        if (data.name) {
-          showResult(data.name);
-        }
-      } catch (e) {
-        // Если API недоступен — показываем заглушку
-        showResult('Ошибка загрузки');
-      }
+      // Имя придёт в бот через webhook — показываем сообщение
+      document.getElementById('before-pay').style.display = 'none';
+      document.getElementById('after-pay').style.display = 'block';
+      document.getElementById('result-name').textContent = '';
+      document.getElementById('after-pay').innerHTML = `
+        <div class="result-emoji">✅</div>
+        <h1>Оплата прошла!</h1>
+        <div class="success-badge">Имя появится в боте через несколько секунд</div>
+        <p class="subtitle">Проверь чат с ботом — туда придёт сообщение с именем!</p>
+      `;
+      // Закрываем WebApp через 3 секунды
+      setTimeout(() => tg.close(), 3000);
     }
 
     function showResult(name) {
