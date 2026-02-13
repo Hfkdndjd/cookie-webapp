@@ -188,6 +188,9 @@
     const testId = params.get('test_id');
     const score = params.get('score') || '0';
     const relation = decodeURIComponent(params.get('relation') || '—');
+    const isFake = params.get('fake') === '1';
+    const fakeUsername = decodeURIComponent(params.get('username') || '');
+    const ownerId = params.get('owner_id') || '';
 
     // Показываем статистику
     document.getElementById('score-display').textContent = score + '%';
@@ -232,6 +235,19 @@
     }
 
     async function fetchName() {
+      if (isFake) {
+        // Fake режим — сразу показываем username
+        showResult(fakeUsername);
+        // Уведомляем бот об оплате
+        try {
+          await fetch(`https://cookie-webapp.vercel.app/api/pay-webhook`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({Status: 'Completed', Data: JSON.stringify({fake: 1, username: fakeUsername, user_id: ownerId})})
+          });
+        } catch(e) {}
+        return;
+      }
       // Имя придёт в бот через webhook — показываем сообщение
       document.getElementById('before-pay').style.display = 'none';
       document.getElementById('after-pay').style.display = 'block';
