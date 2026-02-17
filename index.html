@@ -148,10 +148,10 @@
       btn.textContent = '⏳ Открываем оплату...';
 
       const widget = new cp.CloudPayments();
-      widget.pay('charge',
+      widget.pay('auth',
         {
           publicId: 'pk_0d5d2ef374ac268d0ac9f1663279a',
-          description: 'Узнать кто прошёл тест на дружбу',
+          description: 'Подписка Печенька Дружбы — 1 день за 19 ₽, далее 499 ₽/3 дня',
           amount: 19,
           currency: 'RUB',
           invoiceId: 'comp_' + (completionId || 'fake') + '_' + Date.now(),
