@@ -28,16 +28,44 @@
     }
     .emoji { font-size: 64px; margin-bottom: 20px; }
     h1 { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
-    .subtitle { font-size: 15px; color: #888; margin-bottom: 32px; line-height: 1.5; }
+    .subtitle { font-size: 15px; color: #888; margin-bottom: 24px; line-height: 1.5; }
     .hidden-block {
       background: #f8f8f8;
       border-radius: 16px;
       padding: 24px;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
       border: 2px dashed #ddd;
     }
     .hidden-name { font-size: 28px; filter: blur(8px); user-select: none; color: #333; font-weight: 700; }
     .hidden-label { font-size: 13px; color: #aaa; margin-top: 8px; }
+
+    /* Блок с инфо о подписке */
+    .subscription-info {
+      background: #fff8f0;
+      border: 1.5px solid #ffe0b2;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .subscription-info .info-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e65100;
+      margin-bottom: 10px;
+    }
+    .subscription-info .info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .subscription-info .info-row:last-child { margin-bottom: 0; }
+    .subscription-info .info-row span.icon { font-size: 16px; }
+
+
     .pay-btn {
       background: linear-gradient(135deg, #ff6b35, #f7931e);
       color: white;
@@ -49,8 +77,9 @@
       width: 100%;
       cursor: pointer;
       margin-bottom: 12px;
+      transition: opacity 0.2s;
     }
-    .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .pay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .price-note { font-size: 13px; color: #aaa; }
     .result-block { display: none; }
     .result-emoji { font-size: 56px; margin-bottom: 12px; }
@@ -71,15 +100,27 @@
       <div class="emoji">🍪</div>
       <h1>Узнай кто прошёл твой тест</h1>
       <p class="subtitle">Кто-то прошёл твой тест на дружбу.<br>Узнай кто это!</p>
+
       <div class="hidden-block">
         <div class="hidden-name">Аноним</div>
         <div class="hidden-label">Имя скрыто — оплати чтобы узнать</div>
       </div>
+
+      <!-- Инфо о подписке -->
+      <div class="subscription-info">
+        <div class="info-title">📋 Что вы покупаете:</div>
+        <div class="info-row"><span class="icon">🔐</span> Открытие имени прошедшего тест</div>
+        <div class="info-row"><span class="icon">👑</span> Премиум-доступ на <b>1 день</b></div>
+        <div class="info-row"><span class="icon">💳</span> Стоимость: <b>19 ₽</b></div>
+        <div class="info-row"><span class="icon">🚫</span> Отмена: команда <b>/unsubscribe</b> в боте</div>
+      </div>
+
       <button class="pay-btn" id="pay-btn" onclick="startPayment()">
-        👀 Узнать за 99 ₽
+        👀 Узнать за 19 ₽
       </button>
       <p class="price-note">Безопасная оплата через CloudPayments</p>
     </div>
+
     <div class="result-block" id="after-pay">
       <div class="result-emoji">✅</div>
       <h1>Оплата прошла!</h1>
@@ -111,7 +152,7 @@
         {
           publicId: 'pk_0d5d2ef374ac268d0ac9f1663279a',
           description: 'Узнать кто прошёл тест на дружбу',
-          amount: 99,
+          amount: 19,
           currency: 'RUB',
           invoiceId: 'comp_' + (completionId || 'fake') + '_' + Date.now(),
           accountId: String(userId),
@@ -127,7 +168,7 @@
           onSuccess: function(options) { showSuccess(); },
           onFail: function(reason, options) {
             btn.disabled = false;
-            btn.textContent = '👀 Узнать за 99 ₽';
+            btn.textContent = '👀 Узнать за 19 ₽';
           }
         }
       );
