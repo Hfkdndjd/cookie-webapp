@@ -66,36 +66,7 @@
     .subscription-info .info-row span.icon { font-size: 16px; }
 
 
-    /* Чекбокс согласия */
-    .consent-block {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 16px;
-      text-align: left;
-      cursor: pointer;
-      padding: 12px;
-      background: #fff8f0;
-      border-radius: 12px;
-      border: 1.5px solid #ffe0b2;
-    }
-    .consent-block input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      min-width: 18px;
-      cursor: pointer;
-      accent-color: #ff6b35;
-      margin-top: 2px;
-    }
-    .consent-block label {
-      font-size: 12px;
-      color: #555;
-      line-height: 1.5;
-      cursor: pointer;
-    }
-    .consent-block label b { color: #e65100; }
-
-    .pay-btn {
+.pay-btn {
       background: linear-gradient(135deg, #ff6b35, #f7931e);
       color: white;
       border: none;
@@ -140,26 +111,15 @@
         <div class="info-title">📋 Что вы покупаете:</div>
         <div class="info-row"><span class="icon">🔐</span> Открытие имени</div>
         <div class="info-row"><span class="icon">👑</span> 1 день — <b>19 ₽</b></div>
-        <div class="info-row"><span class="icon">🔄</span> Далее — <b>499 ₽/день </b></div>
         <div class="info-row"><span class="icon">🚫</span> Отмена — <b>/unsubscribe</b></div>
       </div>
 
       <input type="email" id="email-input" placeholder="Ваш email для чека" style="width: 100%; padding: 16px; border: 1.5px solid #ddd; border-radius: 12px; font-size: 15px; margin-bottom: 16px;" required>
 
-      <div class="consent-block" onclick="toggleTerms()">
-        <input type="checkbox" id="terms-check">
-        <label for="terms-check">Я согласен с <a href="https://pechenkabot.ru/terms" target="_blank" style="color:#ff6b35;">офертой</a> и <a href="https://pechenkabot.ru/privacy" target="_blank" style="color:#ff6b35;">политикой конфиденциальности</a></label>
-      </div>
-
-      <div class="consent-block" onclick="toggleRecurring()">
-        <input type="checkbox" id="recurring-check">
-        <label for="recurring-check">Я согласен на автоматическое списание <b>499 ₽</b> через 24 часа с последующим премиум-доступом на 5 дней</label>
-      </div>
-
-      <button class="pay-btn" id="pay-btn" onclick="startPayment()" disabled>
+      <button class="pay-btn" id="pay-btn" onclick="startPayment()">
         👀 Узнать за 19 ₽
       </button>
-      <p class="price-note">Email нужен для отмены подписки</p>
+      <p class="price-note">Совершая оплату, вы соглашаетесь с <a href="https://pechenkabot.ru/terms" target="_blank" style="color:#ff6b35;">офертой</a> и <a href="https://pechenkabot.ru/privacy" target="_blank" style="color:#ff6b35;">политикой конфиденциальности</a></p>
     </div>
 
     <div class="result-block" id="after-pay">
@@ -183,50 +143,12 @@
     const ownerId = params.get('owner_id') || '';
     const userId = tg.initDataUnsafe?.user?.id || '';
 
-    function updateButton() {
-      const termsChecked = document.getElementById('terms-check').checked;
-      const recurringChecked = document.getElementById('recurring-check').checked;
-      document.getElementById('pay-btn').disabled = !(termsChecked && recurringChecked);
-    }
-
-    function toggleTerms() {
-      const check = document.getElementById('terms-check');
-      check.checked = !check.checked;
-      updateButton();
-    }
-
-    function toggleRecurring() {
-      const check = document.getElementById('recurring-check');
-      check.checked = !check.checked;
-      updateButton();
-    }
-
-    document.getElementById('terms-check').addEventListener('click', function(e) {
-      e.stopPropagation();
-      updateButton();
-    });
-
-    document.getElementById('recurring-check').addEventListener('click', function(e) {
-      e.stopPropagation();
-      updateButton();
-    });
-
     function startPayment() {
       const emailInput = document.getElementById('email-input');
       const email = emailInput.value.trim();
       
       if (!email || !email.includes('@')) {
         alert('Введите корректный email');
-        return;
-      }
-      
-      if (!document.getElementById('terms-check').checked) {
-        alert('Необходимо согласие с офертой и политикой');
-        return;
-      }
-      
-      if (!document.getElementById('recurring-check').checked) {
-        alert('Необходимо согласие на автосписание');
         return;
       }
 
