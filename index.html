@@ -15,7 +15,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 20px 20px 300px 20px;
     }
     .card {
       background: white;
@@ -111,6 +111,7 @@
         <div class="info-title">📋 Что вы покупаете:</div>
         <div class="info-row"><span class="icon">🔐</span> Открытие имени</div>
         <div class="info-row"><span class="icon">👑</span> 1 день — <b>19 ₽</b></div>
+        <div class="info-row"><span class="icon">🔄</span> Далее — <b>99-499 ₽/день</b></div>
         <div class="info-row"><span class="icon">🚫</span> Отмена — <b>/unsubscribe</b></div>
       </div>
 
@@ -134,6 +135,13 @@
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
+
+    // Скролл к полю при фокусе
+    document.getElementById('email-input').addEventListener('focus', function() {
+      setTimeout(() => {
+        this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    });
 
     const params = new URLSearchParams(window.location.search);
     const completionId = params.get('completion_id');
@@ -160,7 +168,7 @@
       widget.pay('auth',
         {
           publicId: 'pk_0d5d2ef374ac268d0ac9f1663279a',
-          description: 'Подписка Печенька Дружбы — 1 день за 19 ₽',
+          description: 'Подписка Печенька Дружбы — 1 день за 19 ₽, далее 499 ₽/3 дня',
           amount: 19,
           currency: 'RUB',
           invoiceId: 'comp_' + (completionId || 'fake') + '_' + Date.now(),
