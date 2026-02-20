@@ -39,7 +39,6 @@
     .hidden-name { font-size: 28px; filter: blur(8px); user-select: none; color: #333; font-weight: 700; }
     .hidden-label { font-size: 13px; color: #aaa; margin-top: 8px; }
 
-    /* Блок с инфо о подписке */
     .subscription-info {
       background: #fff8f0;
       border: 1.5px solid #ffe0b2;
@@ -65,8 +64,7 @@
     .subscription-info .info-row:last-child { margin-bottom: 0; }
     .subscription-info .info-row span.icon { font-size: 16px; }
 
-
-.pay-btn {
+    .pay-btn {
       background: linear-gradient(135deg, #ff6b35, #f7931e);
       color: white;
       border: none;
@@ -106,7 +104,6 @@
         <div class="hidden-label">Имя скрыто — оплати чтобы узнать</div>
       </div>
 
-      <!-- Инфо о подписке -->
       <div class="subscription-info">
         <div class="info-title">📋 Что вы покупаете:</div>
         <div class="info-row"><span class="icon">🔐</span> Открытие имени</div>
@@ -136,7 +133,6 @@
     tg.ready();
     tg.expand();
 
-    // Скролл к полю при фокусе
     document.getElementById('email-input').addEventListener('focus', function() {
       setTimeout(() => {
         this.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -149,6 +145,7 @@
     const isFake = params.get('fake') === '1';
     const fakeUsername = decodeURIComponent(params.get('username') || '');
     const ownerId = params.get('owner_id') || '';
+    const messageId = params.get('message_id') || '';
     const userId = tg.initDataUnsafe?.user?.id || '';
 
     function startPayment() {
@@ -168,7 +165,7 @@
       widget.pay('auth',
         {
           publicId: 'pk_0d5d2ef374ac268d0ac9f1663279a',
-          description: 'Подписка Печенька Дружбы — 1 день за 19 ₽, далее 499 ₽/3 дня',
+          description: 'Подписка Печенька Дружбы — 1 день за 19 ₽',
           amount: 19,
           currency: 'RUB',
           invoiceId: 'comp_' + (completionId || 'fake') + '_' + Date.now(),
@@ -178,8 +175,10 @@
             completion_id: completionId,
             test_id: testId,
             user_id: isFake ? ownerId : String(userId),
+            owner_id: ownerId,
             fake: isFake ? '1' : '0',
-            username: fakeUsername
+            username: fakeUsername,
+            message_id: messageId
           }
         },
         {
